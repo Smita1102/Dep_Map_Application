@@ -1,0 +1,12 @@
+{% extends "blog/base.html" %}
+
+{%   block content %}
+
+<h3>Contact Form</h3>
+
+<form method="post" action="{% url 'index' %}">
+	{% csrf_token %}
+	<textarea  name="message" rows="10" cols="50" placeholder="Please write your email address along with your feedback."></textarea>
+	<input type="submit"  name="Feedback_Submit" value="Submit" type="submit" button id="feedback"/>
+</form>
+{% endblock content %}

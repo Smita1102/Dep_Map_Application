@@ -1,0 +1,45 @@
+{% extends "blog/base.html" %}
+{%   block content %}
+	<br>
+  <br>
+	<h2>Choose A Stream To Contribute </h2>
+
+
+<form method="GET">
+  <button name="valuebutton" value="P" type="submit" button id="myButton" button style="margin:5px;" class="btn btn-info btn-lg btn-block" >Physics</button>
+
+    <button name="valuebutton" value="C" type="submit" button id="myButton2" button style="margin:5px;" class="btn btn-info btn-lg btn-block" href ="mcq.html">Chemistry</button>
+
+
+   <button name="valuebutton" value="M" type="submit" button id="myButton3" button style="margin:5px;" class="btn btn-info btn-lg btn-block" href ="mcq.html">Biology</button>
+</form>
+
+<!--
+ 
+<button type="button" button id="myButton" button style="margin:5px;" class="btn btn-info btn-lg btn-block" >Physics </button>
+
+  <script type="text/javascript">
+    document.getElementById("myButton").onclick = function () {
+        location.href = "mcq";
+    };
+  </script>
+
+
+  <button type="button" button id="myButton2" button style="margin:5px;" class="btn btn-info btn-lg btn-block" href ="mcq.html">Chemistry</button>
+
+  <script type="text/javascript">
+    document.getElementById("myButton2").onclick = function () {
+        location.href = "mcq";
+    };
+  </script>
+
+   <button type="button" button id="myButton3" button style="margin:5px;" class="btn btn-info btn-lg btn-block" href ="mcq.html">Biology</button>
+
+   <script type="text/javascript">
+    document.getElementById("myButton3").onclick = function () {
+        location.href = "mcq";
+    };
+  </script>
+	 -->
+   
+{% endblock content %}

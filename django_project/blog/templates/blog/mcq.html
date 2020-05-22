@@ -1,0 +1,177 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="mdl-grid portfolio-max-width">
+  {% if question %}
+  <form class="mdl-cell mdl-cell--12-col mdl-card mdl-shadow--4dp" method="POST"  action="" >
+    {% csrf_token %}
+    <input type="hidden" value="{{question.question_type}}^{{question.set_id}}^{{question.question_id}}" name="question-id">
+    <div class="mdl-card__title mdl-card--border">
+      <h2 class="mdl-card__title-text">{{question.question_text}}</h2>
+    </div>
+    <div class="mdl-card__supporting-text no-vertical-padding">
+      <ul class="choice-list-control mdl-list">
+        {% for choice in list_choice %}
+        <li class="mdl-list__item">
+          <label class="container" for="{{ choice.id }}">
+            <input type="checkbox" id="{{ choice.id }}" class="mdl-radio__button" name="choice" value="{{ choice.id }}" >
+            <span class="checkmark" >{{ choice.choice_text }}</span>
+          </label>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <form class="form-horizontal" method="POST" action="">
+{% csrf_token %}
+
+{{ formset.management_form }}
+{% for form in formset %}
+
+<div class="row form-row spacer">
+    <div class="col-2">
+        <label>{{form.name.label}}</label>
+    </div>
+    <div class="col-4">
+        <div class="input-group">
+            {{form.name}}
+            <div class="input-group-append">
+                <button class="btn btn-success add-form-row">+</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+<div class="row spacer">
+    <div class="col-4 offset-2">
+        <button type="submit" class="btn btn-block btn-primary" name="btn_click", value="create">Done</button>
+    </div>
+</div>
+
+<br>
+    <div class="mdl-card__actions mdl-card--border">
+      <button class="btn btn-primary active"  type="Submit" name="btn_click" value="1" onclick=" return atleast_onecheckbox(event)"/>
+        Submit
+      </button>
+    <button class="btn btn-primary active"  align="right" type="Submit" name="skip" value="0">
+        Skip
+      </button>
+      
+      
+  </form>
+  
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+ <script type="text/javascript">
+  function atleast_onecheckbox(e) {
+  if ($("input[type=checkbox]:checked").length === 0) {
+      e.preventDefault();
+      alert('Please select atleast one checkbox');
+      return false;
+  }
+}
+ </script> 
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+ <script>
+   $(document).ready(function () {
+    $(".btn").on('click', function () {
+        $('#check').append('<input type="checkbox" name="myCheckbox" />' + $(".txt").val());
+    });
+});
+   function updateElementIndex(el, prefix, ndx) {
+    var id_regex = new RegExp('(' + prefix + '-\\d+)');
+    var replacement = prefix + '-' + ndx;
+    if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex, replacement));
+    if (el.id) el.id = el.id.replace(id_regex, replacement);
+    if (el.name) el.name = el.name.replace(id_regex, replacement);
+}
+    function cloneMore(selector, prefix) {
+        var newElement = $(selector).clone(true);
+        var total = $('#id_' + prefix + '-TOTAL_FORMS').val();
+        newElement.find(':input:not([type=button]):not([type=submit]):not([type=reset])').each(function () {
+            var name = $(this).attr('name')
+            if (name) {
+                console.log("Form name->  "+name)
+                name = name.replace('-' + (total - 1) + '-', '-' + total + '-');
+                var id = 'id_' + name;
+                $(this).attr({
+                    'name': name,
+                    'id': id
+                }).val('').removeAttr('checked');
+            }
+        });
+        total++;
+        $('#id_' + prefix + '-TOTAL_FORMS').val(total);
+        $(selector).after(newElement);
+        var conditionRow = $('.form-row:not(:last)');
+        conditionRow.find('.btn.add-form-row')
+            .removeClass('btn-success').addClass('btn-danger')
+            .removeClass('add-form-row').addClass('remove-form-row')
+            .html('-');
+        return false;
+    }
+
+
+function deleteForm(prefix, btn) {
+    var total = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+    if (total > 1){
+        btn.closest('.form-row').remove();
+        var forms = $('.form-row');
+        $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
+        for (var i=0, formCount=forms.length; i<formCount; i++) {
+            $(forms.get(i)).find(':input').each(function() {
+                updateElementIndex(this, prefix, i);
+            });
+        }
+    }
+    return false;
+}
+$(document).on('click', '.add-form-row', function(e){
+    e.preventDefault();
+    cloneMore('.form-row:last', 'form');
+    return false;
+});
+$(document).on('click', '.remove-form-row', function(e){
+    e.preventDefault();
+    deleteForm('form', $(this));
+    return false;
+});
+ </script>  
+
+
+  {% else %}
+  <div class="mdl-cell mdl-cell--12-col mdl-card mdl-shadow--4dp">
+    <div class="mdl-card__title mdl-card--expand">
+      <h2 class="mdl-card__title-text">All questions complete!</h2>
+    </div>
+    <div class="mdl-card__media">
+      <img src="https://media.giphy.com/media/3oEjI5VtIhHvK37WYo/giphy.gif" alt="eddy murphy" class="article-image">
+    </div>
+    <div class="mdl-card__supporting-text">
+      Thank you for your contribution for this round ! Kindly visit other subject domains as well. Your contribution makes a big difference in developing our learning model.
+      Try coming back later.
+    </div>
+    <div class="mdl-card__actions mdl-card--border">
+      <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{% url 'home' %}">
+        I want another round!
+      </a>
+    </div>
+  </div>
+  {% endif %}
+  {% if error_message %}
+  <div id="error-toast" class="mdl-js-snackbar mdl-snackbar mdl-snackbar--active">
+    <div class="mdl-snackbar__text">{{ error_message }}</div>
+    <button class="mdl-snackbar__action" type="button"></button>
+  </div>
+  {% endif %}
+  {% if messages %}
+  {% for message in messages %}
+  <div id="info-toast" class="mdl-js-snackbar mdl-snackbar mdl-snackbar--active">
+    <div class="mdl-snackbar__text">{{ message | safe }}</div>
+  </div>
+  {% endfor %}
+  {% endif %}
+</div>
+
+
+{% endblock content %}
