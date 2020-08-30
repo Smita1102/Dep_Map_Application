@@ -9,8 +9,5 @@ urlpatterns = [
     path('mcq/', views.QuestionView.as_view(), name='mcq'),
     path('restart', views.restart, name='restart'),
     path('index/', views.index, name='index'),
-
-    
-
-
+    path('graph/', views.graph_view, name='graph'),
 ]   

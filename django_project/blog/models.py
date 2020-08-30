@@ -43,6 +43,7 @@ class Choice(models.Model):
     question_type = models.CharField(max_length=5)
     choice_text= models.CharField(max_length=200)
     set_id = models.IntegerField()
+    is_valid = models.CharField(max_length=1)
 
    
     

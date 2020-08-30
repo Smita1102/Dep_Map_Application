@@ -27,6 +27,35 @@ ul {
 .site-header .navbar-nav .nav-link.active {
   font-weight: 500;
 }
+.navbar {
+  min-height: 50px;
+}
+
+.navbar-brand {
+  padding: 0 0px;
+  height: 50px;
+  line-height: 50px;
+}
+
+.navbar-toggle {
+  /* (80px - button height 34px) / 2 = 23px */
+  margin-top: 23px;
+  padding: 4px 6px !important;
+}
+
+@media (min-width: 768px) {
+  .navbar-nav  > a {
+    /* (80px - line-height of 27px) / 2 = 26.5px */
+    padding-top: 10px;
+    padding-bottom: 10 px;
+    line-height: 17px;
+    display: inline-block;
+        width: auto;   
+        vertical-align: middle;
+  }
+}
+
+
 
 .content-section {
   background: #ffffff;
@@ -50,8 +79,8 @@ a.article-title:hover {
 }
 
 .article-img {
-  height: 65px;
-  width: 65px;
+  height: 45px;
+  width: 45px;
   margin-right: 16px;
 }
 

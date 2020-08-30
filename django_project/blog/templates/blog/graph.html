@@ -1,0 +1,168 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+  <meta charset="utf-8">
+  <style> .node circle{cursor:pointer;stroke:#3182bd;stroke-width:1.5px}.node text{font:11px sans-serif;pointer-events:none;text-anchor:middle}line.link{fill:none;stroke:#9ecae1;stroke-width:1.5px} </style>
+<body>
+  <script src="{% static 'blog/d3v3.js'%}"></script>
+  <script>
+    
+var width = screen.width,
+    height = screen.height
+
+var force = d3.layout.force()
+    .linkDistance(80)
+    .charge(-110)
+    .gravity(.05)
+    .size([width, height])
+    .on("tick", tick);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+var link = svg.selectAll(".link"),
+    node = svg.selectAll(".node");
+
+/*
+d3.json("graph.json", function(error, json) {
+  if (error) throw error;
+
+  root = json;
+  update();
+});
+
+*/
+
+//root = {"name":"flare","children":[{"name":"analytics","children":[{"name":"cluster","children":[{"name":"AgglomerativeCluster","size":3938},{"name":"CommunityStructure","size":3812},{"name":"HierarchicalCluster","size":6714},{"name":"MergeEdge","size":743}]},{"name":"graph","children":[{"name":"BetweennessCentrality","size":3534},{"name":"LinkDistance","size":5731},{"name":"MaxFlowMinCut","size":7840},{"name":"ShortestPaths","size":5914},{"name":"SpanningTree","size":3416}]},{"name":"optimizaion","children":[{"name":"AspectRatioBanker","size":7074}]}]}]}
+root = JSON.parse('{{ graph_data | escapejs }}')
+update();
+
+function update() {
+  var nodes = flatten(root),
+      links = d3.layout.tree().links(nodes);
+
+  // Restart the force layout.
+  force
+      .nodes(nodes)
+      .links(links)
+      .start();
+
+  // Update links.
+  link = link.data(links, function(d) { return d.target.id; });
+
+  link.exit().remove();
+
+  link.enter().insert("line", ".node")
+      .attr("class", "link");
+
+  // Update nodes.
+  node = node.data(nodes, function(d) { return d.id; });
+
+  node.exit().remove();
+
+  var nodeEnter = node.enter().append("g")
+      .attr("class", "node")
+      .on("click", click)
+      .call(force.drag);
+
+  nodeEnter.append("circle")
+      .attr("r", function(d) { return Math.sqrt(d.size) / 5 || 6.5; });
+
+  nodeEnter.append("text")
+      .attr("dy", ".50em")
+      .text(function(d) { return d.name; });
+
+  node.select("circle")
+      .style("fill", color);
+}
+
+
+
+function tick() {
+  link.attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
+
+  node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+}
+
+function color(d) {
+  return d._children ? "#3182bd" // collapsed package
+      : d.children ? "#c6dbef" // expanded package
+      : "#fd8d3c"; // leaf node
+}
+
+// Toggle children on click.
+function click(d) {
+  if (d3.event.defaultPrevented) return; // ignore drag
+  if (d.children) {
+    d._children = d.children;
+    d.children = null;
+  } else {
+    d.children = d._children;
+    d._children = null;
+  }
+  update();
+}
+
+// Returns a list of all nodes under the root.
+function flatten(root) {
+  var nodes = [], i = 0;
+
+  function recurse(node) {
+    if (node.children) node.children.forEach(recurse);
+    if (!node.id) node.id = ++i;
+    nodes.push(node);
+  }
+
+  recurse(root);
+  return nodes;
+}
+
+function tickActions() {
+    //constrains the nodes to be within a box
+      node
+        .attr("cx", function(d) { return d.x = Math.max(radius, Math.min(width - radius, d.x)); })
+        .attr("cy", function(d) { return d.y = Math.max(radius, Math.min(height - radius, d.y)); });
+        
+    link
+        .attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+}
+
+//custom force to put stuff in a box 
+function box_force() { 
+  for (var i = 0, n = nodes_data.length; i < n; ++i) {
+    curr_node = nodes_data[i];
+    curr_node.x = Math.max(radius, Math.min(width - radius, curr_node.x));
+    curr_node.y = Math.max(radius, Math.min(height - radius, curr_node.y));
+  }
+}
+simulation
+    .force("charge_force", charge_force)
+    .force("center_force", center_force)
+    .force("links",link_force);
+
+        
+//add tick instructions: 
+simulation.on("tick", tickActions );                      
+simulation
+    .force("charge_force", charge_force)
+    .force("center_force", center_force)
+    .force("links",link_force)
+    .force("box_force", box_force)
+ ;
+
+//make sure you can't drag the circle outside the box
+function drag_drag(d) {
+  d.fx = Math.max(radius, Math.min(width - radius, d3.event.x));
+  d.fy = Math.max(radius, Math.min(height - radius, d3.event.y));
+}
+
+</script>
+{% endblock content %}

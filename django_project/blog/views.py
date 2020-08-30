@@ -8,6 +8,8 @@ from django.contrib.auth.decorators import login_required
 import random
 from django import forms
 from .forms import BookFormset
+import json
+import ast
 
 
 #EMAIL
@@ -49,7 +51,7 @@ class QuestionView(View):
                 user_completed_sets=SetsAttempted.objects.filter(user_id=request.user, question_type=l_question_type).values("set_id").distinct()
                 possible_sets = Question.objects.filter(question_type=l_question_type).exclude(set_id__in=user_completed_sets).values("set_id").distinct()
                 if len(possible_sets) == 0:
-                    possible_sets = Question.objects.filter(question_type=l_question_type).values("set_id").distinct()                    
+                    possible_sets = Question.objects.filter(question_type=l_question_type).values("set_id").distinct()
                 set_id = int(random.choice(possible_sets)['set_id'])
                 print("user_completed_sets Sets-> ", user_completed_sets)
                 print("Possible Sets-> ", possible_sets)
@@ -68,7 +70,8 @@ class QuestionView(View):
             #print(question)
             _choices=Choice.objects.filter(question_type=""+l_question_type+"", 
                                         question_id=l_question_id, 
-                                        set_id=l_set_id)
+                                        set_id=l_set_id,
+                                        is_valid= 'Y')
 
         #print(_choices)
 
@@ -109,6 +112,17 @@ class QuestionView(View):
                                 question_id=_question_id,
                                 question_type=question_type,
                                 set_id=set_id).save()
+                            
+                            Choice(choice_text=name,
+                                    question_id=question_id,
+                                    set_id=set_id,
+                                    question_type=question_type,
+                                    is_valid='Y'
+                                    ).save()
+        elif(pst_btn == 'remove'):
+            if request.method == 'POST':
+                choice_id = request.POST.getlist('choice', 0)
+                Choice.objects.filter(question_id=question_id, set_id=set_id,question_type=question_type, id__in=choice_id).update(is_valid='N')
         else:
             if(pst_btn== 1):
                 choice_id = 0
@@ -208,5 +222,70 @@ def create_normal(request):
         'formset': formset,
         'heading': heading_message,
     })
+
+def getQuestionIDName(q_id):
+    query_questionname = Question.objects.filter(question_id=q_id).values('question_text')
+    return (query_questionname[0]['question_text'])
+
+def getChoiceName(c_id):
+    query_choicename =  Choice.objects.filter(id=c_id).values('choice_text')
+    return (query_choicename[0]['choice_text'])
+
+
+def reform_graph(uid):
+    gd = {"name":"Subjects"}
+    subject_map = {
+        'P': 'Physics',
+        'M': 'Biology',
+        'C': 'Chemistry'
+    }
+    children= []
+    query_distinct_QuestionType = SetsAttempted.objects.filter(user_id=uid).values('question_type').distinct()
+    #print(query_distinct_QuestionType)
+    for value in query_distinct_QuestionType:
+        question_type = value['question_type']
+        obj_1_key = {"name":subject_map[question_type]}
+        obj_1_children = []
+
+        quest_distinct_QuestionID = SetsAttempted.objects.filter(user_id=uid, question_type=question_type).values('question_id').distinct()
+        for value in quest_distinct_QuestionID:
+            question_id = value['question_id']
+            obj_2_key = {"name":getQuestionIDName(question_id)}
+            obj_2_children = []
+
+            quest_distinct_Choices = SetsAttempted.objects.filter(user_id=uid, question_type=question_type, question_id=question_id).values('Value').distinct()
+            choice_list = []
+            for value in quest_distinct_Choices:
+                if value['Value'] == "0":
+                    continue
+                choice_list.extend(ast.literal_eval(value['Value']))
+            #print("Choice List -> ", choice_list)
+
+            for value in choice_list:
+                obj_2_children.append({"name":getChoiceName(value)})
+
+            obj_2_key["children"] = obj_2_children
+            obj_1_children.append(obj_2_key)
+        obj_1_key["children"] = obj_1_children
+        children.append(obj_1_key)
+
+    gd["children"]= children
+    #print(gd)
+    #gd = {"name":"flare","children":[{"name":"analytics","children":[{"name":"cluster","children":[{"name":"AgglomerativeCluster","size":3938},{"name":"CommunityStructure","size":3812},{"name":"HierarchicalCluster","size":6714},{"name":"MergeEdge","size":743}]},{"name":"graph","children":[{"name":"BetweennessCentrality","size":3534},{"name":"LinkDistance","size":5731},{"name":"MaxFlowMinCut","size":7840},{"name":"ShortestPaths","size":5914},{"name":"SpanningTree","size":3416}]},{"name":"optimization","children":[{"name":"AspectRatioBanker","size":7074}]}]}]}
+    return gd
+
+
+def graph_view(request):
+    template_name = 'blog/graph.html'
+    #graph_data = json.dumps({"name":"flare","children":[{"name":"analytics","children":[{"name":"cluster","children":[{"name":"AgglomerativeCluster","size":3938},{"name":"CommunityStructure","size":3812},{"name":"HierarchicalCluster","size":6714},{"name":"MergeEdge","size":743}]},{"name":"graph","children":[{"name":"BetweennessCentrality","size":3534},{"name":"LinkDistance","size":5731},{"name":"MaxFlowMinCut","size":7840},{"name":"ShortestPaths","size":5914},{"name":"SpanningTree","size":3416}]},{"name":"optimization","children":[{"name":"AspectRatioBanker","size":7074}]}]}]})
+    graph_data = json.dumps(reform_graph(request.user))
+    contex_object = {
+        'title':'graph',
+        'graph_data': graph_data
+    }
+    return render(request,
+                    template_name,
+                    contex_object
+                )
 
 

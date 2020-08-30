@@ -1,8 +1,7 @@
 {% extends 'blog/base.html' %}
 {% load static %}
 {% block content %}
-
-<div class="mdl-grid portfolio-max-width">
+<div class="mdl-grid portfolio-max-width jumbotron ">
   {% if question %}
   <form class="mdl-cell mdl-cell--12-col mdl-card mdl-shadow--4dp" method="POST"  action="" >
     {% csrf_token %}
@@ -22,6 +21,12 @@
         {% endfor %}
       </ul>
     </div>
+    
+  
+    
+    
+
+
     <form class="form-horizontal" method="POST" action="">
 {% csrf_token %}
 
@@ -36,7 +41,7 @@
         <div class="input-group">
             {{form.name}}
             <div class="input-group-append">
-                <button class="btn btn-success add-form-row">+</button>
+                <button class="btn btn-block btn-outline-success add-form-row">+</button>
             </div>
         </div>
     </div>
@@ -44,25 +49,34 @@
 {% endfor %}
 <div class="row spacer">
     <div class="col-4 offset-2">
-        <button type="submit" class="btn btn-block btn-primary" name="btn_click", value="create">Done</button>
+        <button type="submit" class="btn btn-block btn-outline-dark" name="btn_click", value="create">Create</button>
     </div>
+    <div class="col-4 offset-2">
+      <button type="submit" class="btn btn-block btn-outline-danger" name="btn_click", value="remove">Delete</button>
+  </div>
 </div>
 
 <br>
+
     <div class="mdl-card__actions mdl-card--border">
-      <button class="btn btn-primary active"  type="Submit" name="btn_click" value="1" onclick=" return atleast_onecheckbox(event)"/>
+      <button class="btn btn-outline-primary "  type="Submit" name="btn_click" value="1" onclick=" return atleast_onecheckbox(event)"/>
         Submit
       </button>
-    <button class="btn btn-primary active"  align="right" type="Submit" name="skip" value="0">
+    <button class="btn btn-outline-secondary "  align="right" type="Submit" name="skip" value="0">
         Skip
       </button>
       
       
+      
+
   </form>
   
-  </div>
+</div>
+
+
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
- <script type="text/javascript">
+<script type="text/javascript">
   function atleast_onecheckbox(e) {
   if ($("input[type=checkbox]:checked").length === 0) {
       e.preventDefault();
@@ -70,9 +84,9 @@
       return false;
   }
 }
- </script> 
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
- <script>
+</script> 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script>
    $(document).ready(function () {
     $(".btn").on('click', function () {
         $('#check').append('<input type="checkbox" name="myCheckbox" />' + $(".txt").val());
@@ -105,7 +119,7 @@
         $(selector).after(newElement);
         var conditionRow = $('.form-row:not(:last)');
         conditionRow.find('.btn.add-form-row')
-            .removeClass('btn-success').addClass('btn-danger')
+            .removeClass('btn-block btn-outline-success').addClass('btn-block btn-outline-danger')
             .removeClass('add-form-row').addClass('remove-form-row')
             .html('-');
         return false;
@@ -136,7 +150,7 @@ $(document).on('click', '.remove-form-row', function(e){
     deleteForm('form', $(this));
     return false;
 });
- </script>  
+</script>  
 
 
   {% else %}
@@ -146,6 +160,11 @@ $(document).on('click', '.remove-form-row', function(e){
     </div>
     <div class="mdl-card__media">
       <img src="https://media.giphy.com/media/3oEjI5VtIhHvK37WYo/giphy.gif" alt="eddy murphy" class="article-image">
+    </div>
+    <div class="mdl-card__actions mdl-card--border">
+      <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{% url 'graph' %}">
+       View your Graph!!
+      </a>
     </div>
     <div class="mdl-card__supporting-text">
       Thank you for your contribution for this round ! Kindly visit other subject domains as well. Your contribution makes a big difference in developing our learning model.
