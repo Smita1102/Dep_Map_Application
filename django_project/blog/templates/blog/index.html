@@ -6,7 +6,7 @@
 
 <form method="post" action="{% url 'index' %}">
 	{% csrf_token %}
-	<textarea  name="message" rows="10" cols="50" placeholder="Please write your email address along with your feedback."></textarea>
+	<textarea  name="message" rows="10" cols="50" placeholder="Kindly mention your name along with your feedback."></textarea>
 	<input type="submit"  name="Feedback_Submit" value="Submit" type="submit" button id="feedback"/>
 </form>
 {% endblock content %}

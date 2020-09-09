@@ -22,7 +22,88 @@
       float: right;
     }
 
-   
+    p{
+  display: block;
+  text-align: justify;
+}
+
+    body {font-family: Arial, Helvetica, sans-serif;  text-align: justify;}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  position: relative;
+  background-color: #ffffff;
+  align-content: center;
+  margin: auto;
+  padding: 0;
+  
+  
+  border: 1px solid #888;
+  width: 80%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  -webkit-animation-name: animatetop;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animatetop;
+  animation-duration: 0.4s
+}
+
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+  from {top:-300px; opacity:1} 
+  to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+  from {top:-300px; opacity:1}
+  to {top:0; opacity:1}
+}
+
+/* The Close Button */
+.close {
+  color: white;
+  float: right;
+ 
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-header {
+  padding: 8px 25px;
+  
+  background-color: #87aadf;
+  color: white;
+}
+
+.modal-body {padding: 8px 25px;}
+
+.modal-footer {
+  padding: 8px 25px;
+  background-color: #87aadf;
+  color: white;
+}
     </style> 
    <style> .node circle{cursor:pointer;stroke:#3182bd;stroke-width:1.5px}.node text{font:11px sans-serif;pointer-events:none;text-anchor:middle}line.link{fill:none;stroke:#9ecae1;stroke-width:1.5px} </style>
 	{% if title %}
@@ -71,7 +152,8 @@
 <br>
 <main role="main" class="container">
   <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-8 ">
+  
       {% if messages %}
         {% for message in messages %}
         <div class="alert alert-{{message.tags}}">

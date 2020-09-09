@@ -2,6 +2,83 @@
 {%   block content %}
 	<br>
   <br>
+      
+
+      
+
+      <!-- Trigger/Open The Modal -->
+      <button id="myBtn">Read Me!</button>
+      
+      <!-- The Modal -->
+      <div id="myModal" class="modal">
+      
+        <!-- Modal content -->
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="text-dark">Welcome to our Dep-Map Application!</h5>
+            <span class="close">&times;</span>
+            
+          </div>
+          <div class="modal-body" >
+            
+            <h6 class="text-secondary "> 
+           
+
+ <p class="text-secondary">
+  We have created a Dep-Map application for our research based project "Atlas of Learning” where we are creating a learning model which will give us an indication for pre-requisite to be studied for an existing keyword. Inorder to support our hypothesis for the  research based model we need your contribution to determine the prerequisites of a given keyword .
+  
+
+  
+</p>
+ 
+ <p class="text-secondary">
+  The task is to identify related keywords for a given context word. For example, if "Force" is given as a keyword word you have to select respective context words which as per your knowledge you can conclude as  appropriate pre-requisite topics for the given keyword like "Acceleration,Mass,Velocity ,etc" for the keyword "Force".</p>
+
+ <p class="text-secondary">
+ 
+  Also, if you do not wish to contribute for certain keyword ,you can skip using the "Skip Button" .If you want to add more keywords you can contribute using the "Add Button" .Similarly ,for deleting a particular context words use the "Delete Button".Your contribution will be recorded along with your identity in our DataBase after you click the "Submit Button" for a particular Keyword and will be observed in the Graph section (above on the heading bar as Node).You can visualise a user based graph  at the end for your reference where you can check your interpretation as  contributed in a form of "Linked Graph" where visualization is  differentiated as keyword and context word as per your contribution.Kindly give us friendly feedback at the end of the contribution.Your contribution is valuable for the expansion of our free friendly knowledge base community .
+
+
+</p>
+
+
+          </h6></div>
+          <div class="modal-footer">
+            <h5>Thank you.</h5>
+          </div>
+        </div>
+      </div>
+      
+      
+      <script>
+      // Get the modal
+      var modal = document.getElementById("myModal");
+      
+      // Get the button that opens the modal
+      var btn = document.getElementById("myBtn");
+      
+      // Get the <span> element that closes the modal
+      var span = document.getElementsByClassName("close")[0];
+      
+      // When the user clicks the button, open the modal 
+      btn.onclick = function() {
+        modal.style.display = "block";
+      }
+      
+      // When the user clicks on <span> (x), close the modal
+      span.onclick = function() {
+        modal.style.display = "none";
+      }
+      
+      // When the user clicks anywhere outside of the modal, close it
+      window.onclick = function(event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      }
+      </script>
+<br>
+<br>
 	<h2>Choose A Stream To Contribute </h2>
 
 
