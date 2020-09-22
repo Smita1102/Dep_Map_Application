@@ -1,4 +1,10 @@
 # Dep-Map-App
+
+The term base used for Sqlite3 Db is been extracted and developed at the repository mentioned below:
+Refer : https://github.com/Smita1102/Atlas-of-Learning-Project
+
+refer requirements.txt file. 
+
 python 3.7.3 or higher with pip
 
 Whatever you prefer to manage your python dependencies VirtualEnv, Pipenv, Conda or anything that alllows you to use pip install
